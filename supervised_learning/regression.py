@@ -1,5 +1,6 @@
 import numpy as np
 import math
+from utils import normalize,polynomial_features
 
 class l1_regularization():
     """ Regularization for Lasso Regression """
@@ -54,4 +55,8 @@ class LassoRegression(Regression):
         self.regularization = l1_regularization(alpha=reg_factor)
         super(LassoRegression,self).__init__(n_iters=n_iters,lr=lr)
     def fit(self,X,y):
-        
+        X = normalize(polynomial_features(X,degree=self.degree))
+        super(LassoRegression,self).fit(X,y)
+    def predict(self,X):
+        X = normalize(polynomial_features(X,degree=self.degree))
+        return super(LassoRegression,self).predict(X)
