@@ -47,3 +47,11 @@ class LinearRegression(Regression):
         super(LinearRegression,self).__init__(n_iters=n_iters,lr=lr)
     def fit(self,X,y):
         super(LinearRegression,self).fit(X,y)
+
+class LassoRegression(Regression):
+    def __init__(self,degree,reg_factor,n_iters=1000,lr=0.0001):
+        self.degree = degree
+        self.regularization = l1_regularization(alpha=reg_factor)
+        super(LassoRegression,self).__init__(n_iters=n_iters,lr=lr)
+    def fit(self,X,y):
+        

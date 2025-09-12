@@ -1,4 +1,4 @@
-from supervised_learning.regression import LinearRegression as LR
+from supervised_learning.regression import Lasso as LR
 import numpy as np
 import math
 from utils import train_test_split

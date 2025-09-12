@@ -1,5 +1,6 @@
 import numpy as np
 import math
+from itertools import combinations_with_replacement
 
 
 def shuffle_data(X,y,seed=None):
@@ -18,6 +19,33 @@ def batch_iterator(X,y=None,batch_size=32):
             yield X[begin:end],y[begin:end]
         else:
             yield X[begin:end]
+
+def polynomial_features(X,degree):
+    n_samples,n_features = np.shape(X)
+    
+    def index_combinations():
+        combs = [combinations_with_replacement(range(n_features)),i
+                 for i in range(0,degree+1)]
+        flat_combs = [item for sublist in combs for item in sublist]
+        return flat_combs
+    combs = index_combinations()
+    n_output_features = len(combs)
+    X_new = np.empty((n_samples,n_output_features))
+
+    for i,index_comb in enumerate(combs):
+        X_new[:,i] = np.prod(X[:,index_comb],axis=1)
+    return X_new
+
+def normalize(X):
+    """ Standardize the dataset X"""
+    X_std = X
+    mean = X.mean(axis=0)
+    std = X.std(axis=0)
+    for col in range(np.shape(X)[1]):
+        if std[col]:
+            X_std[:,col] = (X_std[:,col] - mean[col])/std[col]
+    # X_std = (X _ X.mean(axis=0)) / X.std(axis=0)
+    return X_std
 
 def train_test_split(X,y,test_size=0.2,shuffle=True,seed=36):
     if shuffle:
