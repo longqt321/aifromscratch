@@ -78,3 +78,40 @@ class Dense(Layer):
     
     def output_shape(self):
         return (self.n_units,)
+
+activation_functions = {
+    'relu': ReLU,
+    'sigmoid': Sigmoid,
+    # 'selu': SELU,
+    # 'elu': ELU,
+    'softmax': Softmax,
+    'leaky_relu': LeakyReLU,
+    'tanh': TanH,
+    # 'softplus': SoftPlus
+}
+
+class Activation(Layer):
+    """A layer that applies an activation operation to the input.
+
+    Parameters:
+    -----------
+    name: string
+        The name of the activation function that will be used.
+    """
+    def __init__(self,name):
+        self.activation_name = name
+        self.activation_func = activation_functions[name]()
+        self.trainable = True
+
+    def layer_name(self):
+        return "Activatioon (%s)" % (self.activation_func.__class__.__name__)
+    
+    def forward_pass(self,X,training=True):
+        self.layer_input = X
+        return self.activation_func(X)
+    
+    def backward_pass(self, accum_grad):
+        return accum_grad * self.activation_func.grad(self.layer_input)
+    
+    def output_shape(self):
+        return self.input_shape
