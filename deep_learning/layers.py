@@ -75,3 +75,6 @@ class Dense(Layer):
         
         accum_grad = accum_grad.dot(W.T)
         return accum_grad
+    
+    def output_shape(self):
+        return (self.n_units,)
